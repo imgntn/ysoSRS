@@ -1,1 +1,51 @@
-my page
+<html>
+<head>
+</head>
+<body>
+  <script src="seriously.js"></script>
+    <script src="effects/seriously.vignette.js"></script>
+    <script src="effects/seriously.hue-saturation.js"></script>
+    <script src="effects/seriously.ripple.js"></script>
+<script src="html5slider.js"></script>
+<video style="display:none" id ="myvideo" width="800"  height="600" src="video.webm" autoplay >
+</video>
+
+
+
+<input type="range" id="vignette-range" min="0" max="20" step="0.0001" value="4"/>
+<input type="range" id="hue-range" min="0" max="1" step="0.0001" value="0.1"/>
+<input type="range" id="distortionwave-range" min="0" max="20" step="0.0001" value="5"/>
+
+<canvas id="canvas" width="800" height="600"></canvas>
+
+<script>
+
+var seriously = new Seriously(),
+
+    video = seriously.source('#myvideo'); // get video element by CSS selector
+    target = seriously.target('#canvas'); // output canvas
+    vignette = seriously.effect('vignette');
+        hueSaturation = seriously.effect('hue-saturation');
+        ripple = seriously.effect('ripple');
+
+// connect all our nodes in the right order
+vignette.source = video;
+hueSaturation.source = vignette;
+ripple.source = hueSaturation;
+target.source = ripple;
+seriously.go();
+hueSaturation.hue = '#hue-range';
+vignette.amount = '#vignette-range';
+ripple.distortion = '#distortionwave-range';
+ripple.wave = '#distortionwave-range';
+
+count = 0;
+//program some effects if you want -- setInterval(function(){count++;setColor(count*10);moveRipples(count);zoomToLevel(count/10)},100);
+
+
+function zoomToLevel(amount){vignette.amount=amount;return vignette.amount}
+function setColor(amount){hueSaturation.hue=amount/1000;return hueSaturation.hue}
+function moveRipples(amount){ripple.distortion=amount/10;ripple.wave=amount/10}
+</script>
+</body>
+</html>
